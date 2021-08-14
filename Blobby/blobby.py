@@ -47,18 +47,20 @@ class Blobby:
     def inspect(self):
         self.decay()
         if self.hunger > 50:
-            print('Blobby is hungry', self.hunger)
+            hunger = 'Blobby is hungry', self.hunger
         elif self.hunger < 10:
-            print('Blobby is fed', self.hunger)
+            hunger = ('Blobby is fed', self.hunger)
         else:
-            print('Blobby is peckish', self.hunger)
+            hunger = ('Blobby is peckish', self.hunger)
 
         if self.boredom > 50:
-            print('Blobby is bored', self.boredom)
+            boredom = ('Blobby is bored', self.boredom)
         elif self.boredom < 10:
-            print('Blobby is amused', self.boredom)
+            boredom = ('Blobby is amused', self.boredom)
         else:
-            print('Blobby wouldn\'t mind a playtime', self.boredom)
+            boredom = ('Blobby wouldn\'t mind a playtime', self.boredom)
+
+        return " ".join(str(hunger) + str(boredom))
 
 
     def play(self, play_time=10):
