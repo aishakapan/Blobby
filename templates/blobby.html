@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Blobby!</title>
+</head>
+<body>
+<img src="{{ hunger_image }}" alt="{{ hunger}}" style="width:300px;height:300px;">
+<img src="{{ boredom_image }}" alt="{{ boredom}}" style="width:300px;height:300px;">
+<div>
+    {{hunger}}<br>{{boredom}}
+</div>
+<a href="{{url_for('feed')}}">feed </a>
+</body>
+</html>
