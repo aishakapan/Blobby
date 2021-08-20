@@ -40,7 +40,8 @@ class Blobby:
 
     def feed(self, portion=10):
         self.decay()
-        self.hunger = self.hunger - portion
+        new_hunger = self.hunger - portion
+        self.hunger = max(new_hunger, 0)
 
     # decreasing hunger and boredom by 10
 
@@ -65,7 +66,8 @@ class Blobby:
 
     def play(self, play_time=10):
         self.decay()
-        self.boredom = self.boredom - play_time
+        new_boredom = self.boredom - play_time
+        self.boredom = max(new_boredom, 0)
 
 def save(blobby):
     with open('blobby.pkl', 'wb') as blobby_file:

@@ -37,12 +37,14 @@ def inspect():
 @app.route("/feed")
 def feed():
     feeding = blobby1.feed()
-    feeding = blobby1.inspect()
-    return feeding
+    url_for_inspect = flask.url_for('inspect')
+    redirect = flask.redirect(url_for_inspect)
+    return redirect
 
 
 @app.route("/play")
 def play():
     playing = blobby1.play()
-    playing = blobby1.inspect()
-    return playing
+    url_for_inspect = flask.url_for('inspect')
+    redirect = flask.redirect(url_for_inspect)
+    return redirect
