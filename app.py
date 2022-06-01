@@ -4,34 +4,37 @@ import flask
 app = Flask(__name__)
 
 
-# try:
-#     blobby1 = blobby.load()
-# except Exception:
-blobby1 = blobby.Blobby(starting_hunger=50)
+blobby1 = blobby.Blobby()
 
 @app.route("/")
 @app.route("/inspect")
 def inspect():
     inspecting = blobby1.inspect()
-    hunger_image = 'static/happy.png'
-    boredom_image = 'static/happy.png'
+    blobby_image = 'static/happy.png'
 
-    if blobby1.hunger > 50:
-        hunger_image = 'static/hungry.png'
-    elif blobby1.hunger < 10:
-        hunger_image = 'static/happy.png'
+    hunger = blobby1.inspect_hunger()
+    boredom = blobby1.inspect_boredom()
+    health_problems = hunger + boredom
+    print(health_problems)
 
 
-    if blobby1.boredom > 50:
-        boredom_image = 'static/sleepy.png'
-    elif blobby1.boredom < 10:
-        boredom_image = 'static/happy.png'
+    if health_problems < 10:
+        blobby_image = 'static/very_happy.png'
+    elif 10 < health_problems < 40:
+        blobby_image = 'static/happy.png'
+    elif 40 < health_problems < 60:
+        blobby_image = 'static/neutral.png'
+    elif 60 < health_problems < 80:
+        blobby_image = 'static/sad.png'
+    else:
+        blobby_image = 'static/very_sad.png'
+
+
 
     html = flask.render_template('blobby.html',
-                                 hunger = inspecting[0],
-                                 boredom = inspecting[1],
-                                 hunger_image = hunger_image,
-                                 boredom_image = boredom_image)
+                                 hunger=inspecting[0],
+                                 boredom=inspecting[1],
+                                 blobby_image=blobby_image)
     return html
 
 @app.route("/feed")
