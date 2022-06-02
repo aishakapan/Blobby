@@ -17,8 +17,8 @@ class Blobby:
         time_passed_in_sec = time_passed.total_seconds()
         amount_per_sec = 0.1
         total_decay = time_passed_in_sec * amount_per_sec
-        self.hunger += total_decay
-        self.boredom += total_decay
+        self.hunger = max(0, min(int(self.hunger + total_decay), 50))
+        self.boredom = max(0, min(int(self.boredom + total_decay), 50))
         self.last_check = time_now
 
 
