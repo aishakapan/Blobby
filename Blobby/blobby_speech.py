@@ -2,18 +2,20 @@
 
 from pysentimiento import create_analyzer
 
-def process_sentiment():
-    analyzer = create_analyzer(task='sentiment', lang='en')
-    results = analyzer.predict('I have seen a pretty flower')
-    output = str(results)
-    return output[22:25]
-
-def blob_talk():
-    blob_sentiment = process_sentiment()
+def process_sentiment(message):
+    '''Takes a user message as input and outputs
+    appropriate response based on the sentiment of message'''
     blob_response = None
-    if blob_sentiment == 'POS':
+    analyzer = create_analyzer(task='sentiment', lang='en')
+    print(message)
+    results = analyzer.predict(message)
+    print(results)
+    output = results.output
+    print(output)
+
+    if output == 'POS':
         blob_response = 'Yay :D'
-    elif blob_sentiment == 'NEG':
+    elif output == 'NEG':
         blob_response = 'Aw :('
     else:
         blob_response = 'Oh OK!'
@@ -22,4 +24,8 @@ def blob_talk():
 
 
 
-
+if __name__ == '__main__':
+    print(process_sentiment('well fuck you stupid motherfucking bitch i hate you'))  # Aw :(
+    print(process_sentiment('i got dumped')) # Aw :(
+    print(process_sentiment('i am very happy today')) # Yay :D
+    print(process_sentiment('it is quite normal')) #

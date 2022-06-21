@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat with Blobby</title>
+</head>
+<body>
+
+<form method="post" action ="/respond">
+    {{ form.message.label }}: {{ form.message() }}
+    <button type="submit" class="btn btn-primary">Send</button>
+</form>
+
+</body>
+</html>
