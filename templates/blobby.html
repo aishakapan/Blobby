@@ -1,18 +1,91 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Blobby!</title>
-</head>
-<body>
-<img src="{{ blobby_image }}" alt="{{ hunger}}" style="width:300px;height:300px;">
+    <style>
+        @font-face {
+            font-family: pixel-font;
+            src: url(static/ss_font/slkscre.ttf);
+        }
 
-<div>
-    {{hunger}}<br>{{boredom}}
+        div {
+            font-family: pixel-font;
+        }
+
+        div.parent {
+              position: relative;
+              height: 700px;
+              width: 1000px;
+              border: 3px violet;
+        }
+
+        div.absolute {
+              position: absolute;
+              width: 140%;
+              bottom: 100px;
+        }
+
+        .wrapper {
+            height: 300px;
+            width: 300px;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        body {
+            background-image: url("static/backgrounds/garden.png");
+            background-repeat: no-repeat;
+            height: 100%;
+            background-position: center;
+            background-size: cover;
+        }
+
+        .button {
+              background-color: #9932CC;
+              border: none;
+              color: white;
+              padding: 15px 32px;
+              text-align: center;
+              text-decoration: none;
+              display: inline-block;
+              font-size: 16px;
+              margin: 4px 2px;
+              cursor: pointer;
+        }
+
+        .white {
+              background-color: #FFFFFF;
+              color: #9932CC;
+        }
+
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Blobby!</title>
+</head>
+
+
+<body>
+
+
+<div style="text-align:center" title="{{hunger}}
+{{boredom}}
+{{dirtiness}}">
+    <button class="white button">inspect</button>
 </div>
 
-<a href="{{url_for('feed')}}">feed </a>
-<a href="{{url_for('inspect')}}">inspect</a>
-<a href="{{url_for('play')}}">play </a>
+
+<div style="text-align:center">
+    <a href="{{url_for('feed')}}" class="button">feed</a>
+    <a href="{{url_for('play')}}" class="button">play</a>
+    <a href="{{url_for('clean')}}" class="button">clean</a>
+</div>
+
+
+<div class="parent">
+    <div class="absolute">
+        <img src="{{ blobby_image }}" class="rounded mx-auto d-block" alt="Blobby" style="width:500px;height:500px;"/>
+    </div>
+</div>
+
 
 </body>
 </html>

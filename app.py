@@ -1,3 +1,4 @@
+import Blobby.blobby
 from Blobby import blobby, blobby_speech
 from flask import Flask, request
 from wtforms import Form, StringField, SubmitField
@@ -10,6 +11,7 @@ app = Flask(__name__)
 
 blobby1 = blobby.Blobby()
 
+# TODO: forms should be separate, also it's a CHAT so better use sth different
 class MessageForm(Form):
     message = StringField('Tell Blobby what happened today')
     submit = SubmitField('Send')
@@ -23,9 +25,10 @@ def inspect():
 
     hunger = blobby1.inspect_hunger()
     boredom = blobby1.inspect_boredom()
+    dirtiness = blobby1.inspect_dirtiness()
+
+    has_pooped = blobby1.poop()
     health_problems = hunger + boredom
-
-
 
     if health_problems <= 10:
         blobby_image = 'static/very_happy.png'
@@ -39,10 +42,14 @@ def inspect():
         blobby_image = 'static/very_sad.png'
 
 
+    if dirtiness:
+        blobby_image = Blobby.blobby.add_poop(dirtiness//10, blobby_image)
+
 
     html = flask.render_template('blobby.html',
                                  hunger=inspecting[0],
                                  boredom=inspecting[1],
+                                 dirtiness=inspecting[2],
                                  blobby_image=blobby_image)
     return html
 
@@ -57,6 +64,13 @@ def feed():
 @app.route('/play')
 def play():
     playing = blobby1.play()
+    url_for_inspect = flask.url_for('inspect')
+    redirect = flask.redirect(url_for_inspect)
+    return redirect
+
+@app.route('/clean')
+def clean():
+    cleaning = blobby1.clean()
     url_for_inspect = flask.url_for('inspect')
     redirect = flask.redirect(url_for_inspect)
     return redirect
