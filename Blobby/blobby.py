@@ -34,7 +34,7 @@ class Blobby:
         time_passed = time_now - self.last_pooped
         amount_of_poop = poop_per_day * time_passed.total_seconds()
         new_dirtiness = self.dirtiness + amount_of_poop
-        self.dirtiness = max(0, min(new_dirtiness, 100))
+        self.dirtiness = max(0, min(int(new_dirtiness), 100))
         self.last_pooped = time_now
 
         return
