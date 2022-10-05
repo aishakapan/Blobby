@@ -1,8 +1,7 @@
 import datetime
+import json
 import pickle
-from PIL import Image
-import random
-
+from Blobby.timeconv import sec_to_day
 
 
 class Blobby:
@@ -26,13 +25,15 @@ class Blobby:
         self.boredom = max(0, min(int(self.boredom + total_decay), 100))
         self.sleepiness = max(0, min(int(self.sleepiness + total_decay), 100))
         self.last_check = time_now
+        save(self)
 
 
     def poop(self):
-        poop_per_day = 10
+        poop_per_day = 1
         time_now = datetime.datetime.utcnow()
         time_passed = time_now - self.last_pooped
-        amount_of_poop = poop_per_day * time_passed.total_seconds()
+        amount_of_poop = int(poop_per_day * (sec_to_day(time_passed.total_seconds())))
+        print("the amount of poop: ", amount_of_poop)
         new_dirtiness = self.dirtiness + amount_of_poop
         self.dirtiness = max(0, min(int(new_dirtiness), 100))
         self.last_pooped = time_now
@@ -43,23 +44,27 @@ class Blobby:
     def clean(self, cleaning=10):
         new_dirtiness = self.dirtiness - cleaning
         self.dirtiness = max(0, min(new_dirtiness, 100))
+        save(self)
 
 
     def feed(self, portion=5):
         self.decay()
         new_hunger = self.hunger - portion
         self.hunger = max(0, min(new_hunger, 10))
+        save(self)
 
     def sleep(self, sleep=10):
         self.decay()
         new_sleepiness = self.sleepiness - sleep
         self.sleepiness = max(0, min(new_sleepiness, 100))
+        save(self)
 
 
     def play(self, play_time=5):
         self.decay()
         new_boredom = self.boredom - play_time
         self.boredom = max(0, min(new_boredom, 100))
+        save(self)
 
     def inspect_hunger(self):
         return int(self.hunger)
@@ -112,30 +117,30 @@ class Blobby:
 
 
 def save(blobby):
-    with open('blobby.pkl', 'wb') as blobby_file:
-        pickle.dump(blobby, blobby_file)
+    blobby_stats = {'hunger': blobby.hunger,
+                    'boredom': blobby.boredom,
+                    'dirtiness': blobby.dirtiness,
+                    'sleepiness': blobby.sleepiness
+                    }
+    with open('blobby.json', 'w') as blobby_file:
+        json.dump(blobby_stats, blobby_file)
 
 
 def load():
-    with open('blobby.pkl', 'rb') as blobby_loading:
-        blobs = pickle.load(blobby_loading)
-    return blobs
+    try:
+        with open('blobby.json', 'r') as blobby_file:
+            blobs = json.load(blobby_file)
+    except:
+        blobs = {}
+
+    blobby = Blobby(starting_hunger=blobs.get('hunger', 0),
+                    starting_boredom=blobs.get('boredom', 0),
+                    starting_dirtiness=blobs.get('dirtiness', 0),
+                    starting_sleepiness=blobs.get('sleepiness', 0)
+                    )
+    return blobby
 
 
-def add_poop(num, current_blobby):
-    '''Adds poop to the blobby image at a horizontally random location'''
-
-    poop = Image.open('/home/morkovka/PycharmProjects/Blobby/static/sized_poop.png')
-    img_path = 'static/poopy.png'
-
-    original_image = Image.open(current_blobby)
-    image = original_image.copy()
-    for i in range(num):
-        rand_pos = random.randint(-250, 251)
-        image.paste(poop, (rand_pos, 50), poop)
-    image.save(img_path)
-
-    return img_path
 
 
 if __name__ == '__main__':
@@ -144,8 +149,7 @@ if __name__ == '__main__':
     except Exception:
         blobby1 = Blobby(starting_hunger=0)
     try:
-        while True:
-            save(blobby1)
+        save(blobby1)
     except SystemExit:
         save(blobby1)
         raise
