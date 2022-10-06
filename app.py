@@ -22,13 +22,12 @@ def inspect():
     blobby1 = blobby.load()
     inspecting = blobby1.inspect()
     blobby_image = 'static/happy.png'
-    blobby1.poop()
+    # blobby1.poop()
 
     hunger = blobby1.inspect_hunger()
     boredom = blobby1.inspect_boredom()
     dirtiness = blobby1.inspect_dirtiness()
     sleepiness = blobby1.inspect_sleepiness()
-
 
     health_problems = max(0, min(hunger + boredom + dirtiness + sleepiness, 400))
 
@@ -43,11 +42,10 @@ def inspect():
     elif 320 < health_problems <= 400:
         blobby_image = 'static/very_sad.png'
 
-
-    if dirtiness:
-        blobby_image = bgraphics.add_poop(dirtiness//10, blobby_image)
-
-
+    poop_num = blobby1.poop
+    poop_num = max(0, min(int(poop_num), 10))
+    blobby_image = bgraphics.add_poop(poop_num, blobby_image)
+    print('poop num', poop_num)
 
     html = flask.render_template('blobby.html',
                                  hunger=inspecting[0],
